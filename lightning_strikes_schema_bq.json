@@ -1,0 +1,17 @@
+[
+  {
+    "name": "date",
+    "type": "DATE",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "number_of_strikes",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "center_point_geom",
+    "type": "GEOGRAPHY",
+    "mode": "NULLABLE"
+  }
+]
