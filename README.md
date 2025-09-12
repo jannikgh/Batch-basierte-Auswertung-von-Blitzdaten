@@ -20,7 +20,7 @@ Die Architektur besteht aus folgenden Schritten:
 
 ## 🚀 Nutzung
 
-### 1. Docker Image bauen
+1. Docker Image bauen
 ```bash
 docker build -t lightning-uploader .
 2. Hilfe anzeigen
@@ -39,12 +39,13 @@ docker run --rm \
     --bucket blitzdaten_us1 \
     --dest-prefix input/ \
     --rename-with-timestamp
-🔒 Sicherheit (IAM)
+
+## 🔒 Sicherheit (IAM)
 Für den Zugriff werden Service Accounts genutzt:
 
 Zum Upload benötigt der Service Account mindestens die Rolle Storage Object Admin.
 
 Für Lesezugriffe (Apache Beam) zusätzlich Storage Object Viewer.
 
-📝 Lizenz
+## 📝 Lizenz
 Dieses Projekt steht unter der Apache-2.0 Lizenz.
