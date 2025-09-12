@@ -11,7 +11,7 @@ Die Architektur besteht aus folgenden Schritten:
 
 ## 📂 Repository-Inhalt
 - `dataflow_pipeline.py` → Python-Skript für den Upload in GCS  
-- `lightning_strikes_schema_bq.json` → BigQuery-Schema für die Tabelle
+- `lightning_strikes_schema_bq.json` → BigQuery-Schema für die Tabelle  
 - `requirements.txt` → Python-Abhängigkeiten (z. B. `google-cloud-storage`, `apache-beam[gcp]`)  
 - `Dockerfile` → Containerisierung des Skripts  
 - `LICENSE` → Apache-2.0 Lizenz  
@@ -20,14 +20,16 @@ Die Architektur besteht aus folgenden Schritten:
 
 ## 🚀 Nutzung
 
-1. Docker Image bauen
+### 1. Docker Image bauen
 ```bash
 docker build -t lightning-uploader .
-
 2. Hilfe anzeigen
+bash
+Code kopieren
 docker run --rm lightning-uploader --help
-
 3. CSV-Datei nach GCS hochladen
+bash
+Code kopieren
 docker run --rm \
   -e GOOGLE_APPLICATION_CREDENTIALS=/creds/key.json \
   -v /Users/jannikgross-hardt/Desktop/Batch-basierte-Auswertung-von-Blitzdaten/key.json:/creds/key.json:ro \
@@ -37,9 +39,7 @@ docker run --rm \
     --bucket blitzdaten_us1 \
     --dest-prefix input/ \
     --rename-with-timestamp
-
 🔒 Sicherheit (IAM)
-
 Für den Zugriff werden Service Accounts genutzt:
 
 Zum Upload benötigt der Service Account mindestens die Rolle Storage Object Admin.
@@ -47,5 +47,4 @@ Zum Upload benötigt der Service Account mindestens die Rolle Storage Object Adm
 Für Lesezugriffe (Apache Beam) zusätzlich Storage Object Viewer.
 
 📝 Lizenz
-
 Dieses Projekt steht unter der Apache-2.0 Lizenz.
