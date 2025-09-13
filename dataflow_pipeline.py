@@ -27,7 +27,7 @@ def run():
     google_cloud_options.region = "europe-west3"                  # <- Region
     google_cloud_options.staging_location = "gs://blitzdaten_us1/tmp/staging"
     google_cloud_options.temp_location = "gs://blitzdaten_us1/tmp"
-    options.view_as(StandardOptions).runner = "DataflowRunner"
+    options.view_as(StandardOptions).runner = "DirectRunner"
 
     # Pipeline Definition
     with beam.Pipeline(options=options) as p:
