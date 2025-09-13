@@ -36,7 +36,7 @@ def run():
             | "Read CSV" >> beam.io.ReadFromText("gs://blitzdaten_us1/input/blitzdaten.csv", skip_header_lines=1)
             | "Parse CSV" >> beam.ParDo(ParseCSVLine())
             | "Write to BigQuery" >> beam.io.WriteToBigQuery(
-                table="blitzdaten_us1.lightning_strikes_us1_v2",
+                table="bitzdaten_us1.lightning_strikes_us1_v2",
                 schema="date:STRING, number_of_strikes:INTEGER, center_point_geom:STRING",
                 write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
                 create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED
