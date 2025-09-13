@@ -41,7 +41,13 @@ cd Batch-basierte-Auswertung-von-Blitzdaten`
 
 ### 3. Abhängigkeiten installieren
 
+Für die lokale Entwicklung
+
 `pip install -r requirements.txt`
+
+Für den Docker-Container
+
+`pip install -r requirements-docker.txt`
 
 ### 4. Mit Docker ausführen (Alternative zur lokalen Umgebung)
 
