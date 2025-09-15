@@ -116,8 +116,3 @@ Dockerfile: Containerisiert die Pipeline → garantiert gleiche Umgebung auf jed
 Logging: Parsing-Fehler werden im Pipeline-Skript protokolliert.
 
 Optionale Erweiterung: ein Dockerfile kann hinzugefügt werden, um die Pipeline in Containern laufen zu lassen.
-
-## ML-Platform
-
-Eine mögliche ML Platform (z. B. Vorhersagemodell für Blitzaktivitäten auf Basis der Daten) ist in dieser Architektur nicht Teil der Umsetzung.
-BigQuery ist jedoch so vorbereitet, dass die Daten später für ML-Workflows (z. B. Vertex AI oder BigQuery ML) genutzt werden können.
