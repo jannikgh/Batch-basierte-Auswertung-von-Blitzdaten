@@ -2,9 +2,9 @@
 
 Dieses Projekt implementiert eine skalierbare, wartbare und zuverlässige Datenarchitektur zur Batch-basierten Verarbeitung von Blitzaktivitätsdaten.  
 Die Architektur basiert auf Python-Skripten, Google Cloud Storage (GCS) und BigQuery.  
-Zur Sicherstellung von Reproduzierbarkeit wird die Pipeline zusätzlich in einem **Docker-Container** ausgeführt.  
+Zur Sicherstellung von Reproduzierbarkeit wird die Pipeline zusätzlich in einem Docker-Container ausgeführt.  
 
-Das Projekt wurde im Rahmen des IU-Kurses **Data Engineering (DLMDWWDE02)** umgesetzt.
+Das Projekt wurde im Rahmen des Kurses **Data Engineering (DLMDWWDE02)** umgesetzt.
 
 ---
 
