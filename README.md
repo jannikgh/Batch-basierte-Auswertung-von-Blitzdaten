@@ -34,33 +34,27 @@ Das Projekt wurde im Rahmen des IU-Kurses **Data Engineering (DLMDWWDE02)** umge
 `git clone <REPO_URL>
 cd Batch-basierte-Auswertung-von-Blitzdaten`
 
-### 2. Virtuelle Umgebung erstellen (Python 3.10)
+### 2. Abhängigkeiten
 
-`python3.10 -m venv venv`  
-`source venv/bin/activate`
+Die Projektabhängigkeiten sind in zwei Dateien dokumentiert:
 
-### 3. Abhängigkeiten installieren
+`requirements.txt` --> Standard-Abhängigkeiten für lokale Python-Umgebungen
+`requirements-docker.txt` --> Abhängigkeiten, die im Docker-Image installiert werden
 
-Für die lokale Entwicklung
+Diese Dateien werden beim Docker-Build automatisch berücksichtigt.
 
-`pip install -r requirements.txt`
+### 3. Mit Docker ausführen
 
-Für den Docker-Container
-
-`pip install -r requirements-docker.txt`
-
-### 4. Mit Docker ausführen (Alternative zur lokalen Umgebung)
-
-Image bauen
+Image bauen:
 
 `docker build -t blitzdaten-pipeline .`
 
 Pipeline starten (mit GCP Credentials):
 
-`docker run --rm \
+docker run --rm \
   -v $PWD/key.json:/app/key.json \
   -e GOOGLE_APPLICATION_CREDENTIALS="/app/key.json" \
-  blitzdaten-pipeline`
+  blitzdaten-pipeline
 
 ## Nutzung der Skripte
 
@@ -70,7 +64,7 @@ Validieren & Upload der CSV nach GCS:
 
 `python uploader.py`
 
-### 2. Pipeline lokal ausführen (DirectRunner)
+### 2. Pipeline in Docker ausführen
 
 `python dataflow_pipeline.py`
 
@@ -114,5 +108,3 @@ requirements.txt: ermöglicht reproduzierbare Python-Umgebung.
 Dockerfile: Containerisiert die Pipeline → garantiert gleiche Umgebung auf jedem Rechner
 
 Logging: Parsing-Fehler werden im Pipeline-Skript protokolliert.
-
-Optionale Erweiterung: ein Dockerfile kann hinzugefügt werden, um die Pipeline in Containern laufen zu lassen.
