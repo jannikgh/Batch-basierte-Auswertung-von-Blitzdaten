@@ -1,7 +1,7 @@
 # Batch-basierte Auswertung von Blitzdaten
 
 Dieses Projekt implementiert eine skalierbare, wartbare und zuverlässige Datenarchitektur zur Batch-basierten Verarbeitung von Blitzaktivitätsdaten.  
-Die Architektur basiert auf Python-Skripten, Google Cloud Storage (GCS), einer Apache Beam Pipeline (DirectRunner) und BigQuery.  
+Die Architektur basiert auf Python-Skripten, Google Cloud Storage (GCS) und BigQuery.  
 Zur Sicherstellung von Reproduzierbarkeit wird die Pipeline zusätzlich in einem **Docker-Container** ausgeführt.  
 
 Das Projekt wurde im Rahmen des IU-Kurses **Data Engineering (DLMDWWDE02)** umgesetzt.
