@@ -8,7 +8,7 @@ def validate_csv(file_path):
         reader = csv.reader(csvfile)
         header = next(reader)  # erste Zeile = Spaltennamen
         
-        # Erwartete Spalten (aus deiner Aufgabenstellung)
+        # Erwartete Spalten
         expected_header = ["date", "number_of_strikes", "center_point_geom"]
         if header != expected_header:
             raise ValueError(f"❌ Ungültiges CSV-Format!\n"
@@ -30,7 +30,7 @@ def validate_csv(file_path):
             if not row[0]:
                 raise ValueError(f"❌ Zeile {i}: leeres Datumsfeld")
             
-            # Wir prüfen nur die ersten 100 Zeilen für Performance
+            # Prüfung der ersten 100 Zeilen für Performance
             if i > 100:
                 break
 
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     bucket_name = "blitzdaten_us1"
     destination_blob = "input/blitzdaten.csv"
     
-    # Service Account Key einlesen (falls lokal)
+    # Service Account Key einlesen
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
     
     # 1. Validierung
