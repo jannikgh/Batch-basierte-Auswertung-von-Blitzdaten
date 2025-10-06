@@ -1,63 +1,81 @@
+import configparser
 from google.cloud import storage
 import os
 import csv
+from pathlib import Path
 
-def validate_csv(file_path):
-    """Prüft die CSV-Datei auf Struktur und Datentypen"""
-    with open(file_path, newline='', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        header = next(reader)  # erste Zeile = Spaltennamen
-        
-        # Erwartete Spalten
-        expected_header = ["date", "number_of_strikes", "center_point_geom"]
-        if header != expected_header:
-            raise ValueError(f"❌ Ungültiges CSV-Format!\n"
-                             f"Gefunden: {header}\n"
-                             f"Erwartet: {expected_header}")
-        
-        # Erste paar Zeilen prüfen
-        for i, row in enumerate(reader, start=2):  # start=2 weil header = Zeile 1
-            if len(row) != 3:
-                raise ValueError(f"❌ Zeile {i} hat nicht 3 Spalten: {row}")
-            
-            # Prüfen: number_of_strikes ist Zahl
-            try:
-                int(row[1])
-            except ValueError:
-                raise ValueError(f"❌ Zeile {i}: number_of_strikes ist keine Zahl -> {row[1]}")
-            
-            # Optional: date-Feld prüfen (nur auf Leerstring hier)
-            if not row[0]:
-                raise ValueError(f"❌ Zeile {i}: leeres Datumsfeld")
-            
-            # Prüfung der ersten 100 Zeilen für Performance
-            if i > 100:
-                break
+# Erwartete Header
+EXPECTED_HEADER = ["date", "number_of_strikes", "center_point_geom"]
 
-    print("✅ CSV-Format und Beispieldaten geprüft: OK")
+# Fester Eingabeordner
+LOCAL_INPUT_DIR = None
 
-def upload_to_gcs(bucket_name, source_file, destination_blob):
-    """Lädt eine Datei in einen GCS Bucket hoch"""
-    storage_client = storage.Client()
-    bucket = storage_client.bucket(bucket_name)
-    blob = bucket.blob(destination_blob)
-    
-    blob.upload_from_filename(source_file)
-    print(f"✅ Datei {source_file} wurde als {destination_blob} in {bucket_name} hochgeladen.")
+# Ziel-Bucket und Pfad in GCS
+BUCKET_NAME = None
+GCS_PREFIX = "input/"
+
+# Service Account Credentials
+CREDENTIALS = "key.json"
+
+def read_config():
+    if not Path("./config.ini").exists():
+        raise Exception("❌ Config nicht gefunden.")
+    config = configparser.ConfigParser()
+    config.read("config.ini")
+    path_from_config = config.get("Uploader", "input_dir")
+    global LOCAL_INPUT_DIR
+    LOCAL_INPUT_DIR = Path(path_from_config)
+    global BUCKET_NAME
+    BUCKET_NAME = config.get("Uploader", "bucket_name")
+
+
+def validate_csv(file_path: Path) -> bool:
+    """Validiert eine CSV-Datei anhand Kopfzeile und Spalten."""
+    try:
+        with file_path.open(newline="", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            header = next(reader)
+            number_of_columns = len(EXPECTED_HEADER)
+            if header != EXPECTED_HEADER:
+                raise Exception (f"❌ {file_path.name}: Header ungültig. Gefunden: {header}")
+            for i, row in enumerate(reader, 2):
+                if len(row) != number_of_columns:
+                    raise Exception (f"❌ {file_path.name}: Zeile {i} hat nicht die vorgegebene Anzahl ({number_of_columns}) an Spalten.")
+                int(row[1])  # number_of_strikes muss int sein
+                if not row[0]:
+                    raise Exception (f"❌ {file_path.name}: Zeile {i} enthält kein Datum.")
+        return True
+    except Exception as e:
+        print(f"❌ {file_path.name}: Fehler bei Validierung: {e}")
+        return False
+
+
+def upload_to_gcs(file_path: Path):
+    """Lädt eine Datei in den GCS-Bucket hoch."""
+    client = storage.Client.from_service_account_json(CREDENTIALS)
+    bucket = client.bucket(BUCKET_NAME)
+    blob = bucket.blob(f"{GCS_PREFIX}{file_path.name}")
+    blob.upload_from_filename(str(file_path))
+    print(f"✅ Hochgeladen: {file_path.name} → gs://{BUCKET_NAME}/{GCS_PREFIX}{file_path.name}")
+
+
+def main():
+    read_config()
+    if not LOCAL_INPUT_DIR.exists():
+        raise Exception(f"❌ Ordner {LOCAL_INPUT_DIR} nicht gefunden.")
+
+    csv_files = [f for f in LOCAL_INPUT_DIR.glob("*.csv")]
+    if not csv_files:
+        raise Exception(f"❌ Keine CSV-Dateien in {LOCAL_INPUT_DIR} gefunden.")
+
+    print(f"Gefundene Dateien: {[f.name for f in csv_files]}")
+
+    for csv_file in csv_files:
+        if validate_csv(csv_file):
+            upload_to_gcs(csv_file)
+        else:
+            print(f"⚠️ Datei übersprungen: {csv_file.name}")
+
 
 if __name__ == "__main__":
-    # Lokale CSV-Datei
-    source_file = "/Users/jannikgross-hardt/Desktop/Batch-basierte-Auswertung-von-Blitzdaten/lightning_strikes_dataset.csv"
-    
-    # Ziel in GCS
-    bucket_name = "blitzdaten_us1"
-    destination_blob = "input/blitzdaten.csv"
-    
-    # Service Account Key einlesen
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json"
-    
-    # 1. Validierung
-    validate_csv(source_file)
-    
-    # 2. Upload
-    upload_to_gcs(bucket_name, source_file, destination_blob)
+    main()
