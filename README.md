@@ -43,7 +43,18 @@ Die Projektabhängigkeiten sind in zwei Dateien dokumentiert:
 
 Diese Dateien werden beim Docker-Build automatisch berücksichtigt.
 
-### 3. Mit Docker ausführen
+### 3. Umgebung aufsetzen
+
+Lokale Umgebung mit anderer Python Version:
+
+`source venv/bin/activate`
+
+Umgebungsvariablen setzen
+
+`export GOOGLE_APPLICATION_CREDENTIALS="$PWD/key.json"'
+
+
+### 4. Mit Docker ausführen
 
 Image bauen:
 
@@ -56,15 +67,7 @@ docker run --rm \
   -e GOOGLE_APPLICATION_CREDENTIALS="/app/key.json" \
   blitzdaten-pipeline
 
-## Nutzung der Skripte
-
-### 1. Daten hochladen
-
-Validieren & Upload der CSV nach GCS:
-
-`python uploader.py`
-
-### 2. Pipeline in Docker ausführen
+### 5. Pipeline ausführen
 
 `python dataflow_pipeline.py`
 
