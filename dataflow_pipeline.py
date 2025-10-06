@@ -21,7 +21,7 @@ class ParseCSVLine(beam.DoFn):
 
                 # Geography als Well Known Text (WKT)
                 # Erwartet: fields[2] enthält "lon lat"
-                'center_point_geom': f"POINT({fields[2]})"
+                'center_point_geom': f"{fields[2]}"
             }
             return [parsed_record]
 
@@ -44,10 +44,10 @@ def run():
     with beam.Pipeline(options=options) as p:
         (
             p
-            | "Read CSV" >> beam.io.ReadFromText("gs://blitzdaten_us1/input/blitzdaten.csv", skip_header_lines=1)
+            | "Read CSV" >> beam.io.ReadFromText("gs://blitzdaten_us1/input/lightning_strikes_dataset.csv", skip_header_lines=1)
             | "Parse CSV" >> beam.ParDo(ParseCSVLine())
             | "Write to BigQuery" >> beam.io.WriteToBigQuery(
-                table="blitzdaten_us1.lightning_strikes_us1_v2",
+                table="bitzdaten_us1.lightning_strikes_us1_v4",
                 schema="date:DATE, number_of_strikes:INTEGER, center_point_geom:GEOGRAPHY",
                 write_disposition=beam.io.BigQueryDisposition.WRITE_APPEND,
                 create_disposition=beam.io.BigQueryDisposition.CREATE_IF_NEEDED
