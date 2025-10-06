@@ -51,7 +51,7 @@ Lokale Umgebung mit anderer Python Version:
 
 Umgebungsvariablen setzen
 
-`export GOOGLE_APPLICATION_CREDENTIALS="$PWD/key.json"'
+`export GOOGLE_APPLICATION_CREDENTIALS="$PWD/key.json"`
 
 
 ### 4. Mit Docker ausführen
