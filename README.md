@@ -80,11 +80,11 @@ Nach dem erfolgreichen Pipeline-Lauf können die Ergebnisse in BigQuery abgefrag
 
 ```-- Anzahl der geladenen Zeilen
 SELECT COUNT(*) 
-FROM `agile-bonbon-470410-j2.blitzdaten_us1.lightning_strikes_us1_v2`;
+FROM `agile-bonbon-470410-j2.bitzdaten_us1.lightning_strikes_us1_v4`;
 
 -- Summe der Blitze pro Tag
 SELECT date, SUM(number_of_strikes) AS strikes
-FROM `agile-bonbon-470410-j2.blitzdaten_us1.lightning_strikes_us1_v2`
+FROM `agile-bonbon-470410-j2.bitzdaten_us1.lightning_strikes_us1_v4`
 GROUP BY date
 ORDER BY date ASC;
 ```
