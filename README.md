@@ -62,10 +62,10 @@ Image bauen:
 
 Pipeline starten (mit GCP Credentials):
 
-docker run --rm \
+`docker run --rm \
   -v $PWD/key.json:/app/key.json \
   -e GOOGLE_APPLICATION_CREDENTIALS="/app/key.json" \
-  blitzdaten-pipeline
+  blitzdaten-pipeline`
 
 ### 5. Pipeline ausführen
 
